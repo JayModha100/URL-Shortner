@@ -8,7 +8,7 @@
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {},
 		"ghcr.io/devcontainers/features/common-utils:2": {},
-		"ghcr.io/devcontainers/features/docker-in-docker:3": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:4": {},
 		"ghcr.io/itsmechlark/features/postgresql:1": {},
 		"ghcr.io/nlstn/devcontainer-features/psql:1": {}
 	}
