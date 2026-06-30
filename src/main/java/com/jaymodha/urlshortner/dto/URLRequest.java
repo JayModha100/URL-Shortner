@@ -1,5 +1,7 @@
 package com.jaymodha.urlshortner.dto;
+import jakarta.validation.constraints.NotNull;
 public class URLRequest{
+    @NotNull
     private String url;
 
     public URLRequest() {
