@@ -8,10 +8,11 @@ import jakarta.persistence.Table;
 public class UrlShortner {
     @Id
     private String shortCode;
-    private String OriginalUrl;
+    private String originalUrl;
+
     public UrlShortner() {
     }
-    public Url(String shortCode, String originalUrl) {
+    public UrlShortner(String shortCode, String originalUrl) {
         this.shortCode = shortCode;
         this.originalUrl = originalUrl;
     }

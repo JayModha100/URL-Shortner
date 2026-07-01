@@ -1,24 +1,58 @@
 package com.jaymodha.urlshortner.service;
-import springframework.stereotype.Service;
-import com.jaymodha.urlshortner.repository.Repository;
+import org.springframework.stereotype.Service;
+import com.jaymodha.urlshortner.repository.UrlRepository;
+import java.util.Optional;
+import com.jaymodha.urlshortner.entity.UrlShortner;
+import java.util.UUID;
 
 @Service
 public class UserService {
-    private Repository repository;
+    private UrlRepository repository;
 
-    UserService(Repository repository)
+    public UserService(UrlRepository repository)
     {
         this.repository = repository;
     }
-        public String findUrl(String shortCode) {
-        Optional<Url> url = urlRepository.findByShortCode(shortCode);
+    public String shortenURL(String url){
+        Optional<UrlShortner> existing= repository.findByOriginalUrl(url);
 
-        return url.map(Url::getOriginalUrl)
-                  .orElse("URL not found");
+        if(existing.isPresent()) {
+
+            return "http://localhost:8080/" +    existing.get().getShortCode();
+        }
+        
+        String shortCode = generateCode();
+
+        // 3. Save mapping in database
+
+        UrlShortner urlEntity = 
+                new UrlShortner(shortCode, url);
+
+
+        repository.save(urlEntity);
+
+
+
+        // 4. Return shortcode
+        return "http://localhost:8080/"+ shortCode;
     }
-    public void saveUrl(String shortCode, String originalUrl) {
-        Url url = new Url(shortCode, originalUrl);
-        urlRepository.save(url);
-    
+
+    private String generateCode(){
+        String code;
+
+       do{ code = UUID.randomUUID()
+                .toString()
+                .substring(0,6);
+        }while(repository.existsById(code));
+        return code;
 }
+    public String getOriginalURL(String shortCode) {
+        Optional<UrlShortner> urlEntity = repository.findById(shortCode);
+        if(urlEntity.isPresent()) {
+            return urlEntity.get().getOriginalUrl();
+        }
+        throw new RuntimeException("Short URL not found");
+
+    }
+           
 }
